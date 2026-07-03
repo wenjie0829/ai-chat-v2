@@ -144,10 +144,9 @@ function scrollToBottom() {
   })
 }
 // ===== 模型切换 =====
-const selectedModel = ref('deepseek')
+const selectedModel = ref('智谱 GLM')
 const modelList = ref([ { key: 'deepseek', name: 'DeepSeek' },
-  { key: 'gpt', name: 'GPT-3.5' },
-  { key: 'Doubao', name: 'Doubao' },
+  { key: '智谱 GLM', name: '智谱 GLM' },
   // ...更多模型
 ]);
 

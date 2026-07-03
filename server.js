@@ -25,13 +25,13 @@ const MODELS = {
     apiKey: process.env.ZHIPU_API_KEY,
     model: 'glm-4-plus',
   },
-  doubao: {
-    name: '豆包',
-    provider: 'doubao',
-    apiUrl: 'https://ark.cn-beijing.volces.com/api/v3/chat/completions',
-    apiKey: process.env.DOUBAO_API_KEY,
-    model: 'doubao-seed-evolving',
-  },
+  // doubao: {
+  //   name: '豆包',
+  //   provider: 'doubao',
+  //   apiUrl: 'https://ark.cn-beijing.volces.com/api/v3/chat/completions',
+  //   apiKey: process.env.DOUBAO_API_KEY,
+  //   model: 'doubao-seed-evolving',
+  // },
 };
 
 // 默认模型
