@@ -89,7 +89,7 @@ app.post('/api/chat', async (req, res) => {
 
 // ========== 处理所有非 API 请求 ==========
 // 这个要放在最后，确保所有路由都返回 index.html（支持前端路由）
-app.get('/*', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
