@@ -152,6 +152,7 @@ const modelList = ref([ { key: 'deepseek', name: 'DeepSeek' },
 
 // 加载可用模型列表
 async function loadModels() {
+  return;
   try {
     const res = await fetch('http://localhost:3000/api/models')
     const data = await res.json()
@@ -164,6 +165,7 @@ async function loadModels() {
 
 // 切换模型
 async function switchModel() {
+  return;
   try {
     const res = await fetch('http://localhost:3000/api/models/switch', {
       method: 'POST',
@@ -204,28 +206,31 @@ async function sendMessage() {
   scrollToBottom()
   isLoading.value = true
 
-  try {
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: currentMessages.value,
-      model: selectedModel.value, 
-      }),
-    })
+try {
+  const response = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+      messages: currentMessages.value,
+      model: selectedModel.value
+    }),
+  })
 
- const assistantMsg = data.choices?.[0]?.message?.content
-if (assistantMsg) {
+  // ⭐ 关键：解析响应为 JSON
+  const data = await response.json()
+
+  const assistantMsg = data.reply  // 因为后端返回的是 { reply: "..." }
+  if (assistantMsg) {
     addMessageToCurrent({ role: 'assistant', content: assistantMsg })
-} else {
+  } else {
     addMessageToCurrent({ role: 'assistant', content: '抱歉，我遇到了一点问题，请稍后再试。' })
-}
-  } catch (error) {
-    console.error('请求失败:', error)
-    addMessageToCurrent({ role: 'assistant', content: '网络好像不太稳定，请稍后再试。' })
-  } finally {
-    isLoading.value = false
-    scrollToBottom()
   }
+} catch (error) {
+  console.error('请求失败:', error)
+  addMessageToCurrent({ role: 'assistant', content: '网络好像不太稳定，请稍后再试。' })
+} finally {
+  isLoading.value = false
+  scrollToBottom()
 }
 
 function clearChat() {
