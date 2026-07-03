@@ -23,7 +23,7 @@ const MODELS = {
     provider: 'zhipu',
     apiUrl: 'https://open.bigmodel.cn/api/paas/v4/chat/completions',
     apiKey: process.env.ZHIPU_API_KEY,
-    model: 'glm-4-plus',
+    model: 'glm-5.2',
   },
   // doubao: {
   //   name: '豆包',
