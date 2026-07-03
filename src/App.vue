@@ -218,6 +218,7 @@ try {
 
   // ⭐ 关键：解析响应为 JSON
   const data = await response.json()
+  console.log('后端返回:', data)
 
   const assistantMsg = data.reply  // 因为后端返回的是 { reply: "..." }
   if (assistantMsg) {
