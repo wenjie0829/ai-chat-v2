@@ -213,7 +213,7 @@ try {
     body: JSON.stringify({ 
       messages: currentMessages.value,
       model: selectedModel.value
-    }),
+    })
   })
 
   // ⭐ 关键：解析响应为 JSON
@@ -233,7 +233,7 @@ try {
   isLoading.value = false
   scrollToBottom()
 }
-
+}
 function clearChat() {
   if (currentMessages.value.length <= 1) return
   if (confirm('确定要清空当前对话吗？')) {
