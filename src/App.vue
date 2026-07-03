@@ -56,11 +56,17 @@
       <div class="chat-header">
         <button class="menu-toggle" @click="toggleSidebar">☰</button>
         <h1>💡 智言</h1>
-        <select v-model="selectedModel" @change="switchModel" class="model-select">
+        <select 
+        v-model="selectedModel" 
+        @change="switchModel" 
+        @touchstart="switchModel"
+        class="model-select"
+        style="min-height: 44px; font-size: 16px;"
+      >
         <option v-for="m in modelList" :key="m.key" :value="m.key">
-        {{ m.name }}
-          </option>
-        </select>
+          {{ m.name }}
+        </option>
+      </select>
         <div style="display:flex; gap:8px;">
           <button class="clear-btn" @click="clearChat">🗑️ 清空</button>
           <button class="clear-btn" @click="exportChat">📥 导出</button>
@@ -139,7 +145,11 @@ function scrollToBottom() {
 }
 // ===== 模型切换 =====
 const selectedModel = ref('deepseek')
-const modelList = ref([])
+const modelList = ref([ { key: 'deepseek', name: 'DeepSeek' },
+  { key: 'gpt', name: 'GPT-3.5' },
+  { key: 'Doubao', name: 'Doubao' },
+  // ...更多模型
+]);
 
 // 加载可用模型列表
 async function loadModels() {
