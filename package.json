@@ -8,7 +8,8 @@
     "build": "node node_modules/vite/bin/vite.js build",
     "preview": "vite preview",
     "build-only": "vite build",
-    "type-check": "vue-tsc --build"
+    "type-check": "vue-tsc --build",
+    "start": "node server.cjs"  
   },
   "dependencies": {
     "axios": "^1.18.1",
