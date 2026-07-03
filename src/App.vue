@@ -205,19 +205,20 @@ async function sendMessage() {
   isLoading.value = true
 
   try {
-    const response = await fetch('http://localhost:3000/api/chat', {
+    const response = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: currentMessages.value }),
+      body: JSON.stringify({ messages: currentMessages.value,
       model: selectedModel.value, 
+      }),
     })
 
-    const data = await response.json()
-    if (data.reply) {
-      addMessageToCurrent({ role: 'assistant', content: data.reply })
-    } else {
-      addMessageToCurrent({ role: 'assistant', content: '抱歉，我遇到了一点问题，请稍后再试。' })
-    }
+ const assistantMsg = data.choices?.[0]?.message?.content
+if (assistantMsg) {
+    addMessageToCurrent({ role: 'assistant', content: assistantMsg })
+} else {
+    addMessageToCurrent({ role: 'assistant', content: '抱歉，我遇到了一点问题，请稍后再试。' })
+}
   } catch (error) {
     console.error('请求失败:', error)
     addMessageToCurrent({ role: 'assistant', content: '网络好像不太稳定，请稍后再试。' })
