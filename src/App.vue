@@ -144,9 +144,9 @@ function scrollToBottom() {
   })
 }
 // ===== 模型切换 =====
-const selectedModel = ref('glm-5.2')
+const selectedModel = ref('zhipu')
 const modelList = ref([ { key: 'deepseek', name: 'DeepSeek' },
-  { key: 'glm-5.2', name: '智谱 GLM' },
+  { key: 'zhipu', name: '智谱 GLM' },
   // ...更多模型
 ]);
 
