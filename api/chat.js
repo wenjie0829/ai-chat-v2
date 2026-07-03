@@ -30,7 +30,10 @@ export default async function handler(req, res) {
       return res.status(response.status).json({ error: data.error?.message || 'API request failed' });
     }
 
-    return res.status(200).json({ reply: data.choices?.[0]?.message?.content || '抱歉，我暂时无法回答' });
+    // ⭐️ 重点修改这里
+    const reply = data.choices?.[0]?.message?.content || '抱歉，我暂时无法回答。';
+    return res.status(200).json({ reply });
+
   } catch (error) {
     console.error('Error calling Zhipu API:', error);
     return res.status(500).json({ error: 'Internal server error' });
