@@ -352,42 +352,39 @@ onMounted(() => {
 }
 
 /* ===== 侧栏 ===== */
+/* ===== 侧栏 ===== */
 .sidebar {
   width: 260px;
+  min-width: 260px;
+  max-width: 260px;
   background: #ffffff;
   border-right: 1px solid #e8edf3;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+  overflow: hidden; /* 防止内容溢出 */
   transition: transform 0.3s ease;
 }
+
 .sidebar-header {
   padding: 16px;
   border-bottom: 1px solid #e8edf3;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0; /* 防止被压缩 */
 }
-.sidebar-header h3 {
-  margin: 0;
-  color: #1a3c6e;
-  font-size: 16px;
-}
-.new-chat-btn {
-  background: #1a3c6e;
-  color: white;
-  border: none;
-  padding: 4px 14px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 13px;
-}
+
 .sidebar-search {
   padding: 10px 12px;
   border-bottom: 1px solid #e8edf3;
+  flex-shrink: 0; /* 防止被压缩 */
+  width: 100%;
+  box-sizing: border-box;
 }
 .sidebar-search input {
   width: 100%;
+  max-width: 100%;
   padding: 8px 14px;
   border: 1px solid #d0d9e6;
   border-radius: 20px;
@@ -395,16 +392,19 @@ onMounted(() => {
   outline: none;
   background: #f7f9fc;
   transition: 0.2s;
+  box-sizing: border-box;
 }
 .sidebar-search input:focus {
   border-color: #1a3c6e;
   background: #fff;
   box-shadow: 0 0 0 3px rgba(26, 60, 110, 0.1);
 }
+
 .session-list {
   flex: 1;
   overflow-y: auto;
   padding: 8px;
+  min-height: 0; /* 防止flex溢出 */
 }
 .session-item {
   display: flex;
