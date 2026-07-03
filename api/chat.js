@@ -38,4 +38,5 @@ export default async function handler(req, res) {
     console.error('Error calling Zhipu API:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
+  console.log('TEST_VAR:', process.env.TEST_VAR)
 }
