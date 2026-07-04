@@ -749,11 +749,28 @@ onMounted(() => {
   word-wrap: break-word;
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
+/* ===== 气泡样式 ===== */
 .message.user .bubble {
+  background: #d4b5b5;
+  color: #3d2a2a;
   border-radius: 18px 18px 4px 18px;
 }
+
 .message.assistant .bubble {
+  background: white;
+  color: #3d2a2a;
   border-radius: 18px 18px 18px 4px;
+}
+
+/* ===== 黑夜模式气泡 ===== */
+.dark-theme .message.user .bubble {
+  background: #3a5668;
+  color: #eef4f8;
+}
+
+.dark-theme .message.assistant .bubble {
+  background: #2a3845;
+  color: #dde4e8;
 }
 .bubble :deep(pre) {
   background: #0d1117;
