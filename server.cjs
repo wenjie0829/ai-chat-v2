@@ -32,7 +32,7 @@ function getModelConfig(modelKey) {
 
 // ========== API 路由 ==========
 app.post('/api/chat', async (req, res) => {
-  const { messages, model = 'zhipu' } = req.body;
+  const { messages, model = 'zhipu', enable_search = false } = req.body;
   
   // 实时获取配置
   const config = getModelConfig(model);
