@@ -14,7 +14,8 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ========== 模型配置 ==========
-const MODELS = {
+function getModels() {
+  return {
   deepseek: {
     name: 'DeepSeek',
     provider: 'deepseek',
@@ -29,13 +30,13 @@ const MODELS = {
     apiKey: process.env.ZHIPU_API_KEY,
     model: 'glm-5.2',
   },
+}
 };
-console.log('DEEPSEEK_API_KEY:', process.env.DEEPSEEK_API_KEY ? '已设置 ✓' : '未设置 ✗');
-console.log('ZHIPU_API_KEY:', process.env.ZHIPU_API_KEY ? '已设置 ✓' : '未设置 ✗');
 
 // ========== API 路由：处理聊天请求 ==========
 app.post('/api/chat', async (req, res) => {
   const { messages, model = 'zhipu' } = req.body;
+  const MODELS = getModels();
   const config = MODELS[model];
 
   // 检查模型是否存在
