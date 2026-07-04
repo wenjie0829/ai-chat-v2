@@ -63,7 +63,6 @@ app.post('/api/chat', async (req, res) => {
         model: config.model,
         messages: messages,
         stream: false,
-        search_enabled: enable_search,
       }),
     });
 
