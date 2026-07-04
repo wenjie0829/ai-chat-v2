@@ -1,7 +1,9 @@
 <template>
   <div class="app-container" :class="themeClass">
-    <!-- 侧边栏（点击弹出） -->
+    <!-- 侧边栏遮罩 -->
     <div class="sidebar-overlay" v-if="sidebarOpen" @click="toggleSidebar"></div>
+    
+    <!-- 侧边栏 -->
     <div class="sidebar" :class="{ 'sidebar-open': sidebarOpen }">
       <div class="sidebar-header">
         <h3>💬 对话</h3>
@@ -67,7 +69,7 @@
     <!-- 主聊天区域 -->
     <div class="chat-main">
       <div class="chat-header">
-        <button class="menu-toggle" @click="toggleSidebar">☯</button>
+        <button class="menu-toggle" @click="toggleSidebar">☰</button>
         <h1>💡 智言</h1>
         
         <select v-model="selectedModel" @change="switchModel" class="model-select">
@@ -80,10 +82,8 @@
           {{ theme === 'dark' ? '🌙' : '☀️' }}
         </button>
 
-        <div style="display:flex; gap:8px;">
-          <button class="clear-btn" @click="clearChat">🗑️ 清空</button>
-          <button class="clear-btn" @click="exportChat">📥 导出</button>
-        </div>
+        <button class="clear-btn" @click="clearChat">🗑️ 清空</button>
+        <button class="clear-btn" @click="exportChat">📥 导出</button>
       </div>
 
       <div class="chat-messages" ref="messageContainer">
@@ -376,69 +376,124 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* ===== 中国风主题色 ===== */
+/* ===== 莫兰迪色系 ===== */
 :root {
-  --primary: #c0392b;        /* 朱砂红 */
-  --primary-dark: #a93226;
-  --primary-light: #e74c3c;
-  --gold: #d4a017;           /* 金色 */
-  --ink: #2c2c2c;            /* 墨黑 */
-  --paper: #f5f0eb;          /* 宣纸白 */
-  --paper-dark: #e8e0d8;
-  --jade: #2d8b7a;           /* 青花瓷绿 */
-  --jade-light: #4a9e8e;
+  /* 白天模式 - 莫兰迪粉 */
+  --header-light: #e8d5d5;
+  --sidebar-light: #f5e8e8;
+  --input-light: #faf0f0;
+  --border-light: #dcc8c8;
+  --text-light: #4a3a3a;
+  --bubble-user-light: #d4b5b5;
+  --bubble-user-text-light: #3d2a2a;
   
-  --bg-primary: var(--paper);
-  --bg-sidebar: #ffffff;
-  --bg-chat: var(--paper);
-  --bg-header: var(--primary);
-  --text-primary: var(--ink);
-  --text-secondary: #555;
-  --border-color: #d5c8b8;
-  --bubble-user: var(--primary);
-  --bubble-user-text: white;
-  --bubble-assistant: white;
-  --bubble-assistant-text: var(--ink);
-  --input-bg: white;
-  --shadow-color: rgba(192, 57, 43, 0.15);
-  --sidebar-shadow: rgba(0,0,0,0.2);
+  /* 黑夜模式 - 莫兰迪绿 */
+  --header-dark: #2d3d3a;
+  --sidebar-dark: #1e2d2a;
+  --input-dark: #2a3d3a;
+  --border-dark: #3d554a;
+  --text-dark: #d4e0d8;
+  --bubble-user-dark: #3d5a4a;
+  --bubble-user-text-dark: #f0f5f0;
 }
 
-.dark-theme {
-  --bg-primary: #1a1410;
-  --bg-sidebar: #2c241e;
-  --bg-chat: #1a1410;
-  --bg-header: #2d1a15;
-  --text-primary: #e8ddd0;
-  --text-secondary: #b0a090;
-  --border-color: #3d322a;
-  --bubble-user: var(--primary-dark);
-  --bubble-user-text: white;
-  --bubble-assistant: #2c241e;
-  --bubble-assistant-text: #e8ddd0;
-  --input-bg: #2c241e;
-  --shadow-color: rgba(192, 57, 43, 0.25);
-  --sidebar-shadow: rgba(0,0,0,0.5);
-}
-
-/* ===== 整体 ===== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* ===== 应用白天主题 ===== */
 .app-container {
   display: flex;
   height: 100vh;
   width: 100vw;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  transition: background 0.4s, color 0.4s;
+  background: #faf7f5;
+  color: var(--text-light);
   overflow: hidden;
   position: fixed;
   top: 0;
   left: 0;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* 白天模式具体颜色 */
+.app-container:not(.dark-theme) .chat-header {
+  background: var(--header-light);
+  color: var(--text-light);
+}
+.app-container:not(.dark-theme) .sidebar {
+  background: var(--sidebar-light);
+  border-right: 2px solid var(--border-light);
+}
+.app-container:not(.dark-theme) .chat-input {
+  background: var(--input-light);
+  border-top: 1px solid var(--border-light);
+}
+.app-container:not(.dark-theme) .chat-input input {
+  background: white;
+  border: 1px solid var(--border-light);
+  color: var(--text-light);
+}
+.app-container:not(.dark-theme) .bubble.user {
+  background: var(--bubble-user-light);
+  color: var(--bubble-user-text-light);
+}
+.app-container:not(.dark-theme) .bubble.assistant {
+  background: white;
+  color: var(--text-light);
+}
+.app-container:not(.dark-theme) .sidebar-header {
+  border-bottom: 2px solid var(--border-light);
+}
+.app-container:not(.dark-theme) .sidebar-search input {
+  background: white;
+  border: 1px solid var(--border-light);
+}
+.app-container:not(.dark-theme) .session-item.active {
+  background: rgba(200, 170, 170, 0.25);
+}
+
+/* ===== 黑夜模式 - 莫兰迪绿 ===== */
+.dark-theme {
+  background: #1a2420;
+  color: var(--text-dark);
+}
+.dark-theme .chat-header {
+  background: var(--header-dark);
+  color: var(--text-dark);
+}
+.dark-theme .sidebar {
+  background: var(--sidebar-dark);
+  border-right: 2px solid var(--border-dark);
+}
+.dark-theme .chat-input {
+  background: var(--input-dark);
+  border-top: 1px solid var(--border-dark);
+}
+.dark-theme .chat-input input {
+  background: #1a2a24;
+  border: 1px solid var(--border-dark);
+  color: var(--text-dark);
+}
+.dark-theme .bubble.user {
+  background: var(--bubble-user-dark);
+  color: var(--bubble-user-text-dark);
+}
+.dark-theme .bubble.assistant {
+  background: #1e2d28;
+  color: var(--text-dark);
+}
+.dark-theme .sidebar-header {
+  border-bottom: 2px solid var(--border-dark);
+}
+.dark-theme .sidebar-search input {
+  background: #1a2a24;
+  border: 1px solid var(--border-dark);
+  color: var(--text-dark);
+}
+.dark-theme .session-item.active {
+  background: rgba(60, 100, 80, 0.25);
+}
+.dark-theme .chat-messages {
+  background: #1a2420;
+}
+.dark-theme .sidebar-overlay {
+  background: rgba(0,0,0,0.6);
 }
 
 /* ===== 侧边栏遮罩 ===== */
@@ -448,7 +503,7 @@ onMounted(() => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.3);
   z-index: 98;
   animation: fadeIn 0.25s ease;
 }
@@ -464,13 +519,11 @@ onMounted(() => {
   left: -320px;
   width: 300px;
   height: 100vh;
-  background: var(--bg-sidebar);
-  border-right: 2px solid var(--primary);
   display: flex;
   flex-direction: column;
   z-index: 99;
   transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 2px 0 20px var(--sidebar-shadow);
+  box-shadow: 2px 0 20px rgba(0,0,0,0.1);
   overflow: hidden;
 }
 .sidebar-open {
@@ -479,22 +532,17 @@ onMounted(() => {
 
 .sidebar-header {
   padding: 18px 20px;
-  border-bottom: 2px solid var(--primary);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
-  background: var(--bg-sidebar);
 }
 .sidebar-header h3 {
   font-size: 18px;
-  color: var(--primary);
-  font-weight: 700;
-  letter-spacing: 1px;
+  font-weight: 600;
 }
 .new-chat-btn {
-  background: var(--primary);
-  color: white;
+  background: rgba(0,0,0,0.08);
   border: none;
   padding: 6px 16px;
   border-radius: 20px;
@@ -504,28 +552,23 @@ onMounted(() => {
   transition: background 0.2s;
 }
 .new-chat-btn:hover {
-  background: var(--primary-dark);
+  background: rgba(0,0,0,0.15);
 }
 
 .sidebar-search {
   padding: 12px 16px;
-  border-bottom: 1px solid var(--border-color);
   flex-shrink: 0;
 }
 .sidebar-search input {
   width: 100%;
   padding: 8px 14px;
-  border: 1px solid var(--border-color);
   border-radius: 20px;
   font-size: 14px;
   outline: none;
-  background: var(--bg-primary);
-  color: var(--text-primary);
   transition: 0.2s;
 }
 .sidebar-search input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.15);
+  border-color: #a08080;
 }
 
 .session-list {
@@ -542,14 +585,12 @@ onMounted(() => {
   cursor: pointer;
   margin-bottom: 4px;
   transition: background 0.15s;
-  border-left: 3px solid transparent;
 }
 .session-item:hover {
-  background: rgba(192, 57, 43, 0.08);
+  background: rgba(0,0,0,0.04);
 }
 .session-item.active {
-  background: rgba(192, 57, 43, 0.12);
-  border-left-color: var(--primary);
+  background: rgba(0,0,0,0.08);
 }
 .session-title {
   flex: 1;
@@ -557,16 +598,14 @@ onMounted(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--text-primary);
 }
 .session-title-input {
   flex: 1;
   font-size: 14px;
   padding: 2px 8px;
-  border: 2px solid var(--primary);
+  border: 2px solid #a08080;
   border-radius: 6px;
-  background: var(--bg-primary);
-  color: var(--text-primary);
+  background: transparent;
   outline: none;
 }
 .delete-btn {
@@ -578,7 +617,7 @@ onMounted(() => {
   padding: 0 6px;
 }
 .delete-btn:hover {
-  color: var(--primary);
+  color: #c0392b;
 }
 
 /* ===== 聊天主区域 ===== */
@@ -587,60 +626,53 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  background: var(--bg-chat);
-  transition: background 0.4s;
   height: 100vh;
   width: 100vw;
 }
-
 .chat-header {
   display: flex;
   align-items: center;
-  background: var(--bg-header);
-  color: white;
   padding: 12px 24px;
   gap: 12px;
   flex-shrink: 0;
-  transition: background 0.4s;
+  transition: background 0.3s, color 0.3s;
 }
 .menu-toggle {
-  background: rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.06);
   border: none;
-  color: white;
   font-size: 22px;
   cursor: pointer;
   padding: 4px 10px;
   border-radius: 8px;
   transition: background 0.2s;
+  color: inherit;
 }
 .menu-toggle:hover {
-  background: rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.12);
 }
 .chat-header h1 {
   flex: 1;
   font-size: 20px;
   margin: 0;
   font-weight: 600;
-  letter-spacing: 1px;
 }
 .model-select {
-  background: rgba(255,255,255,0.15);
-  color: white;
-  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.08);
   padding: 4px 14px;
   border-radius: 20px;
   font-size: 14px;
   cursor: pointer;
   outline: none;
+  color: inherit;
 }
-.model-select option {
-  background: #2d1a15;
-  color: white;
+.dark-theme .model-select {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.08);
 }
 .theme-toggle {
-  background: rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.06);
   border: none;
-  color: white;
   padding: 4px 12px;
   border-radius: 20px;
   cursor: pointer;
@@ -648,26 +680,39 @@ onMounted(() => {
   transition: background 0.2s;
 }
 .theme-toggle:hover {
-  background: rgba(255,255,255,0.3);
+  background: rgba(0,0,0,0.12);
+}
+.dark-theme .theme-toggle {
+  background: rgba(255,255,255,0.06);
+}
+.dark-theme .theme-toggle:hover {
+  background: rgba(255,255,255,0.12);
 }
 .clear-btn {
-  background: rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.06);
   border: none;
-  color: white;
   padding: 4px 14px;
   border-radius: 20px;
   cursor: pointer;
   font-size: 13px;
   transition: background 0.2s;
+  color: inherit;
 }
 .clear-btn:hover {
-  background: rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.12);
+}
+.dark-theme .clear-btn {
+  background: rgba(255,255,255,0.06);
+}
+.dark-theme .clear-btn:hover {
+  background: rgba(255,255,255,0.12);
 }
 
 .chat-messages {
   flex: 1;
   overflow-y: auto;
   padding: 20px 24px;
+  background: transparent;
 }
 .message {
   margin-bottom: 14px;
@@ -685,19 +730,13 @@ onMounted(() => {
   padding: 12px 18px;
   border-radius: 18px;
   word-wrap: break-word;
-  background: var(--bubble-assistant);
-  color: var(--bubble-assistant-text);
-  box-shadow: 0 2px 8px var(--shadow-color);
-  transition: background 0.4s, color 0.4s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: background 0.3s, color 0.3s;
 }
 .message.user .bubble {
-  background: var(--bubble-user);
-  color: var(--bubble-user-text);
   border-radius: 18px 18px 4px 18px;
 }
 .message.assistant .bubble {
-  background: var(--bubble-assistant);
-  color: var(--bubble-assistant-text);
   border-radius: 18px 18px 18px 4px;
 }
 .bubble :deep(pre) {
@@ -718,15 +757,15 @@ onMounted(() => {
 .copy-btn {
   background: none;
   border: none;
-  color: var(--text-secondary);
+  color: #999;
   font-size: 12px;
   cursor: pointer;
   padding: 2px 8px;
   border-radius: 4px;
 }
 .copy-btn:hover {
-  background: rgba(192, 57, 43, 0.1);
-  color: var(--primary);
+  background: rgba(0,0,0,0.04);
+  color: #555;
 }
 
 .typing span {
@@ -734,7 +773,7 @@ onMounted(() => {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--text-secondary);
+  background: #999;
   margin-right: 4px;
   animation: blink 1.4s infinite both;
 }
@@ -749,42 +788,43 @@ onMounted(() => {
 .chat-input {
   display: flex;
   padding: 14px 20px;
-  background: var(--bg-chat);
-  border-top: 1px solid var(--border-color);
   gap: 12px;
   flex-shrink: 0;
-  transition: background 0.4s;
+  transition: background 0.3s;
 }
 .chat-input input {
   flex: 1;
   padding: 12px 20px;
-  border: 2px solid var(--border-color);
   border-radius: 30px;
   outline: none;
   font-size: 15px;
-  background: var(--input-bg);
-  color: var(--text-primary);
-  transition: border-color 0.3s, background 0.4s;
+  transition: border-color 0.3s, background 0.3s, color 0.3s;
 }
 .chat-input input:focus {
-  border-color: var(--primary);
+  border-color: #a08080;
 }
 .chat-input button {
-  background: var(--primary);
-  color: white;
+  background: rgba(0,0,0,0.08);
   border: none;
   padding: 12px 28px;
   border-radius: 30px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 15px;
   transition: background 0.2s;
+  color: inherit;
 }
 .chat-input button:hover {
-  background: var(--primary-dark);
+  background: rgba(0,0,0,0.15);
+}
+.dark-theme .chat-input button {
+  background: rgba(255,255,255,0.06);
+}
+.dark-theme .chat-input button:hover {
+  background: rgba(255,255,255,0.12);
 }
 .chat-input button:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
@@ -792,8 +832,8 @@ onMounted(() => {
   animation: flashHighlight 2s ease;
 }
 @keyframes flashHighlight {
-  0% { background-color: rgba(212, 160, 23, 0.3); }
-  50% { background-color: rgba(212, 160, 23, 0.6); }
+  0% { background-color: rgba(200, 170, 170, 0.3); }
+  50% { background-color: rgba(200, 170, 170, 0.6); }
   100% { background-color: transparent; }
 }
 
@@ -801,7 +841,7 @@ onMounted(() => {
 @media (max-width: 768px) {
   .chat-header {
     padding: 10px 14px;
-    gap: 8px;
+    gap: 6px;
     flex-wrap: wrap;
   }
   .chat-header h1 {
