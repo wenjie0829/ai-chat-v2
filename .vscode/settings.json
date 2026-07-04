@@ -4,5 +4,14 @@
     "tsconfig.json": "tsconfig.*.json, env.d.ts, typed-router.d.ts",
     "vite.config.*": "jsconfig*, vitest.config.*, cypress.config.*, playwright.config.*",
     "package.json": "package-lock.json, pnpm*, .yarnrc*, yarn*, .eslint*, eslint*, .oxlint*, oxlint*, .oxfmt*, .prettier*, prettier*, .editorconfig"
+  },
+  "search.useParentIgnoreFiles": true,
+  "search.useGlobalIgnoreFiles": true,
+  "search.exclude": {
+    "**/*.code-search": false
+  },
+  "files.exclude": {
+    "**/.DS_Store": false,
+    "**/Thumbs.db": false
   }
 }

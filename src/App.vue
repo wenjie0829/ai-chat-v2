@@ -89,6 +89,12 @@
       </div>
 
       <div class="chat-input">
+        <div class="input-actions">
+          <label class="search-toggle">
+            <input type="checkbox" v-model="enableSearch" />
+            🌐 联网搜索
+          </label>
+        </div>
         <input 
           type="text" 
           v-model="inputText" 
@@ -188,6 +194,9 @@ async function switchModel() {
   }
 }
 
+  // 新增联网搜索开关状态
+const enableSearch = ref(false);
+
 // 修改 sendMessage，把模型信息传给后端
 // 在 fetch 的 body 里增加 model: selectedModel.value
 
@@ -212,8 +221,9 @@ try {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ 
       messages: currentMessages.value,
-      model: selectedModel.value
-    })
+      model: selectedModel.value,
+      enable_search: enableSearch.value, // 把开关状态传给后端
+    }),
   })
 
   // ⭐ 关键：解析响应为 JSON
@@ -356,7 +366,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<>
 /* ===== 整体布局 ===== */
 .app-container {
   display: flex;
@@ -627,6 +637,29 @@ onMounted(() => {
 .chat-input button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+/* ===== 联网搜索开关样式 ===== */
+.input-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 4px;
+}
+.search-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.search-toggle input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #1a3c6e;
 }
 
 /* ===== 高亮闪烁 ===== */
