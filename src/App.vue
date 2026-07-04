@@ -366,7 +366,7 @@ onMounted(() => {
 })
 </script>
 
-<>
+<style scoped>
 /* ===== 整体布局 ===== */
 .app-container {
   display: flex;
