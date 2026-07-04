@@ -1,9 +1,6 @@
 <template>
   <div class="app-container" :class="themeClass">
-    <!-- 侧边栏遮罩 -->
-    <div class="sidebar-overlay" v-if="sidebarOpen" @click="toggleSidebar"></div>
-    
-    <!-- 侧边栏 -->
+    <!-- 侧边栏（和主界面平级，不覆盖） -->
     <div class="sidebar" :class="{ 'sidebar-open': sidebarOpen }">
       <div class="sidebar-header">
         <h3>💬 对话</h3>
@@ -66,8 +63,8 @@
       </div>
     </div>
 
-    <!-- 主聊天区域 -->
-    <div class="chat-main">
+    <!-- 主聊天区域（侧边栏打开时被挤到右边） -->
+    <div class="chat-main" :class="{ 'chat-shifted': sidebarOpen }">
       <div class="chat-header">
         <button class="menu-toggle" @click="toggleSidebar">☰</button>
         <h1>💡 智言</h1>
@@ -376,160 +373,144 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* ===== 莫兰迪色系 ===== */
-:root {
-  /* 白天模式 - 莫兰迪粉 */
-  --header-light: #e8d5d5;
-  --sidebar-light: #f5e8e8;
-  --input-light: #faf0f0;
-  --border-light: #dcc8c8;
-  --text-light: #4a3a3a;
-  --bubble-user-light: #d4b5b5;
-  --bubble-user-text-light: #3d2a2a;
-  
-  /* 黑夜模式 - 莫兰迪绿 */
-  --header-dark: #2d3d3a;
-  --sidebar-dark: #1e2d2a;
-  --input-dark: #2a3d3a;
-  --border-dark: #3d554a;
-  --text-dark: #d4e0d8;
-  --bubble-user-dark: #3d5a4a;
-  --bubble-user-text-dark: #f0f5f0;
+/* ===== 基础重置 ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* ===== 应用白天主题 ===== */
 .app-container {
   display: flex;
   height: 100vh;
   width: 100vw;
-  background: #faf7f5;
-  color: var(--text-light);
   overflow: hidden;
   position: fixed;
   top: 0;
   left: 0;
-  transition: background 0.3s, color 0.3s;
+  transition: background 0.3s;
 }
 
-/* 白天模式具体颜色 */
+/* ===== 白天模式（不动） ===== */
+.app-container:not(.dark-theme) {
+  background: #faf7f5;
+  color: #3d2a2a;
+}
 .app-container:not(.dark-theme) .chat-header {
-  background: var(--header-light);
-  color: var(--text-light);
+  background: #e8d5d5;
+  color: #3d2a2a;
 }
 .app-container:not(.dark-theme) .sidebar {
-  background: var(--sidebar-light);
-  border-right: 2px solid var(--border-light);
+  background: #f5e8e8;
+  border-right: 2px solid #dcc8c8;
 }
 .app-container:not(.dark-theme) .chat-input {
-  background: var(--input-light);
-  border-top: 1px solid var(--border-light);
+  background: #faf0f0;
+  border-top: 1px solid #dcc8c8;
 }
 .app-container:not(.dark-theme) .chat-input input {
   background: white;
-  border: 1px solid var(--border-light);
-  color: var(--text-light);
+  border: 1px solid #dcc8c8;
+  color: #3d2a2a;
 }
 .app-container:not(.dark-theme) .bubble.user {
-  background: var(--bubble-user-light);
-  color: var(--bubble-user-text-light);
+  background: #d4b5b5;
+  color: #3d2a2a;
 }
 .app-container:not(.dark-theme) .bubble.assistant {
   background: white;
-  color: var(--text-light);
+  color: #3d2a2a;
 }
 .app-container:not(.dark-theme) .sidebar-header {
-  border-bottom: 2px solid var(--border-light);
+  border-bottom: 2px solid #dcc8c8;
 }
 .app-container:not(.dark-theme) .sidebar-search input {
   background: white;
-  border: 1px solid var(--border-light);
+  border: 1px solid #dcc8c8;
 }
 .app-container:not(.dark-theme) .session-item.active {
   background: rgba(200, 170, 170, 0.25);
 }
+.app-container:not(.dark-theme) .chat-messages {
+  background: #faf7f5;
+}
 
-/* ===== 黑夜模式 - 莫兰迪绿 ===== */
+/* ===== 黑夜模式 - 雾霾蓝灰 ===== */
 .dark-theme {
-  background: #1a2420;
-  color: var(--text-dark);
+  background: #1a1f24;
+  color: #dde4e8;
 }
 .dark-theme .chat-header {
-  background: var(--header-dark);
-  color: var(--text-dark);
+  background: #2d3a42;
+  color: #dde4e8;
 }
 .dark-theme .sidebar {
-  background: var(--sidebar-dark);
-  border-right: 2px solid var(--border-dark);
+  background: #24303a;
+  border-right: 2px solid #3a4a55;
 }
 .dark-theme .chat-input {
-  background: var(--input-dark);
-  border-top: 1px solid var(--border-dark);
+  background: #24303a;
+  border-top: 1px solid #3a4a55;
 }
 .dark-theme .chat-input input {
-  background: #1a2a24;
-  border: 1px solid var(--border-dark);
-  color: var(--text-dark);
+  background: #1a242e;
+  border: 1px solid #3a4a55;
+  color: #dde4e8;
 }
 .dark-theme .bubble.user {
-  background: var(--bubble-user-dark);
-  color: var(--bubble-user-text-dark);
+  background: #3a5668;
+  color: #eef4f8;
 }
 .dark-theme .bubble.assistant {
-  background: #1e2d28;
-  color: var(--text-dark);
+  background: #2a3845;
+  color: #dde4e8;
 }
 .dark-theme .sidebar-header {
-  border-bottom: 2px solid var(--border-dark);
+  border-bottom: 2px solid #3a4a55;
 }
 .dark-theme .sidebar-search input {
-  background: #1a2a24;
-  border: 1px solid var(--border-dark);
-  color: var(--text-dark);
+  background: #1a242e;
+  border: 1px solid #3a4a55;
+  color: #dde4e8;
 }
 .dark-theme .session-item.active {
-  background: rgba(60, 100, 80, 0.25);
+  background: rgba(58, 86, 104, 0.3);
 }
 .dark-theme .chat-messages {
-  background: #1a2420;
-}
-.dark-theme .sidebar-overlay {
-  background: rgba(0,0,0,0.6);
+  background: #0d1216;
 }
 
-/* ===== 侧边栏遮罩 ===== */
-.sidebar-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.3);
-  z-index: 98;
-  animation: fadeIn 0.25s ease;
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* ===== 侧边栏 ===== */
+/* ===== 侧边栏（固定宽度，不覆盖） ===== */
 .sidebar {
-  position: fixed;
-  top: 0;
-  left: -320px;
-  width: 300px;
+  width: 280px;
+  min-width: 280px;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  z-index: 99;
-  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+  flex-shrink: 0;
   overflow: hidden;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-left: -280px;
 }
 .sidebar-open {
-  left: 0;
+  margin-left: 0;
 }
 
+/* ===== 主聊天区域（侧边栏打开时被挤到右边） ===== */
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100vh;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-left: 0;
+}
+.chat-shifted {
+  margin-left: 0;
+}
+
+/* ===== 侧边栏内部 ===== */
 .sidebar-header {
   padding: 18px 20px;
   display: flex;
@@ -554,6 +535,12 @@ onMounted(() => {
 .new-chat-btn:hover {
   background: rgba(0,0,0,0.15);
 }
+.dark-theme .new-chat-btn {
+  background: rgba(255,255,255,0.08);
+}
+.dark-theme .new-chat-btn:hover {
+  background: rgba(255,255,255,0.15);
+}
 
 .sidebar-search {
   padding: 12px 16px;
@@ -568,7 +555,7 @@ onMounted(() => {
   transition: 0.2s;
 }
 .sidebar-search input:focus {
-  border-color: #a08080;
+  border-color: #8a9aa8;
 }
 
 .session-list {
@@ -589,8 +576,14 @@ onMounted(() => {
 .session-item:hover {
   background: rgba(0,0,0,0.04);
 }
+.dark-theme .session-item:hover {
+  background: rgba(255,255,255,0.04);
+}
 .session-item.active {
   background: rgba(0,0,0,0.08);
+}
+.dark-theme .session-item.active {
+  background: rgba(255,255,255,0.06);
 }
 .session-title {
   flex: 1;
@@ -603,7 +596,7 @@ onMounted(() => {
   flex: 1;
   font-size: 14px;
   padding: 2px 8px;
-  border: 2px solid #a08080;
+  border: 2px solid #8a9aa8;
   border-radius: 6px;
   background: transparent;
   outline: none;
@@ -621,14 +614,6 @@ onMounted(() => {
 }
 
 /* ===== 聊天主区域 ===== */
-.chat-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  height: 100vh;
-  width: 100vw;
-}
 .chat-header {
   display: flex;
   align-items: center;
@@ -649,6 +634,12 @@ onMounted(() => {
 }
 .menu-toggle:hover {
   background: rgba(0,0,0,0.12);
+}
+.dark-theme .menu-toggle {
+  background: rgba(255,255,255,0.06);
+}
+.dark-theme .menu-toggle:hover {
+  background: rgba(255,255,255,0.12);
 }
 .chat-header h1 {
   flex: 1;
@@ -712,7 +703,7 @@ onMounted(() => {
   flex: 1;
   overflow-y: auto;
   padding: 20px 24px;
-  background: transparent;
+  transition: background 0.3s;
 }
 .message {
   margin-bottom: 14px;
@@ -767,6 +758,10 @@ onMounted(() => {
   background: rgba(0,0,0,0.04);
   color: #555;
 }
+.dark-theme .copy-btn:hover {
+  background: rgba(255,255,255,0.04);
+  color: #aaa;
+}
 
 .typing span {
   display: inline-block;
@@ -801,7 +796,7 @@ onMounted(() => {
   transition: border-color 0.3s, background 0.3s, color 0.3s;
 }
 .chat-input input:focus {
-  border-color: #a08080;
+  border-color: #8a9aa8;
 }
 .chat-input button {
   background: rgba(0,0,0,0.08);
@@ -839,6 +834,14 @@ onMounted(() => {
 
 /* ===== 移动端适配 ===== */
 @media (max-width: 768px) {
+  .sidebar {
+    width: 85vw;
+    min-width: 85vw;
+    margin-left: -85vw;
+  }
+  .sidebar-open {
+    margin-left: 0;
+  }
   .chat-header {
     padding: 10px 14px;
     gap: 6px;
@@ -873,13 +876,6 @@ onMounted(() => {
   .chat-input button {
     padding: 10px 18px;
     font-size: 14px;
-  }
-  .sidebar {
-    width: 85vw;
-    left: -90vw;
-  }
-  .sidebar-open {
-    left: 0;
   }
 }
 </style>
