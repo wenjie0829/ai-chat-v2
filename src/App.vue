@@ -3,7 +3,7 @@
     <!-- 侧边栏（和主界面平级，不覆盖） -->
     <div class="sidebar" :class="{ 'sidebar-open': sidebarOpen }">
       <div class="sidebar-header">
-        <h3>💬 对话</h3>
+        <h3>💡智言</h3>
         <button class="new-chat-btn" @click="handleNewChat">＋ 新对话</button>
       </div>
 
@@ -45,7 +45,7 @@
             <span 
               v-if="editingSessionId !== session.id"
               class="session-title"
-              @dblclick="startEditTitle(session.id)"
+              @dblclick.stop="startEditTitle(session.id)"
             >{{ session.title }}</span>
             <input 
               v-else
@@ -67,7 +67,7 @@
     <div class="chat-main" :class="{ 'chat-shifted': sidebarOpen }">
       <div class="chat-header">
         <button class="menu-toggle" @click="toggleSidebar">☰</button>
-        <h1>💡 智言</h1>
+        <h1 class="chat-title">{{ currentSessionTitle }}</h1>
         
         <select v-model="selectedModel" @change="switchModel" class="model-select">
           <option v-for="m in modelList" :key="m.key" :value="m.key">
@@ -140,6 +140,11 @@ const messageContainer = ref(null)
 const sidebarOpen = ref(false)
 
 const currentMessages = computed(() => getCurrentMessages())
+
+const currentSessionTitle = computed(() => {
+  const session = sessions.value.find(s => s.id === currentSessionId.value)
+  return session?.title || '新对话💬'
+})
 
 // ===== 主题切换 =====
 const theme = ref(localStorage.getItem('theme') || 'light')
