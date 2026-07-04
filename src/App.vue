@@ -79,9 +79,9 @@
           {{ theme === 'dark' ? '🌙' : '☀️' }}
         </button>
 
-        <button class="clear-btn" @click="clearChat">🗑️ 清空</button>
-        <button class="clear-btn" @click="exportChat">📥 导出</button>
-        <button class="clear-btn" @click="shareChat">🔗 分享</button>
+        <button class="clear-btn" @click="clearChat">清空</button>
+        <button class="clear-btn" @click="exportChat">导出</button>
+        <button class="clear-btn" @click="shareChat">分享</button>
       </div>
 
       <div class="chat-messages" ref="messageContainer">
@@ -89,10 +89,9 @@
              :class="['message', msg.role === 'user' ? 'user' : 'assistant']">
           <div class="bubble" v-html="renderMarkdown(msg.content)"></div>
           <div v-if="msg.role === 'assistant'" class="bubble-actions">
-            <button class="copy-btn" @click="copyMessage(msg.content)">📋 复制</button>
+            <button class="copy-btn" @click="copyMessage(msg.content)">复制</button>
           </div>
         </div>
-        <!-- Loading 动画 -->
         <div v-if="isLoading" class="message assistant">
           <div class="bubble typing">
             <span class="dot"></span>
@@ -100,7 +99,6 @@
             <span class="dot"></span>
           </div>
         </div>
-        <!-- 打字机效果 -->
         <div v-if="typingMessage" class="message assistant">
           <div class="bubble" v-html="renderMarkdown(typingMessage)"></div>
         </div>
@@ -116,20 +114,6 @@
           class="chat-textarea"
         />
         <button @click="sendMessage" :disabled="isLoading">发送</button>
-      </div>
-    </div>
-
-    <!-- 登录/注册弹窗 -->
-    <div v-if="showLoginModal" class="modal-overlay" @click="closeModal">
-      <div class="modal-content" @click.stop>
-        <h2>{{ isLogin ? '登录' : '注册' }}</h2>
-        <input v-model="loginEmail" placeholder="邮箱" type="email" />
-        <input v-model="loginPassword" placeholder="密码" type="password" />
-        <button @click="handleAuth">{{ isLogin ? '登录' : '注册' }}</button>
-        <p @click="toggleAuthMode" class="toggle-link">
-          {{ isLogin ? '没有账号？去注册' : '已有账号？去登录' }}
-        </p>
-        <button class="close-modal" @click="closeModal">✕</button>
       </div>
     </div>
   </div>
@@ -157,7 +141,6 @@ marked.setOptions({
   gfm: true
 })
 
-// ===== 基础状态 =====
 const inputText = ref('')
 const isLoading = ref(false)
 const messageContainer = ref(null)
@@ -174,7 +157,7 @@ function typeMessage(content, callback) {
   isTyping.value = true
   typingMessage.value = ''
   let index = 0
-  const speed = 30 // 每字毫秒
+  const speed = 30
   
   function typeChar() {
     if (index < content.length) {
@@ -258,7 +241,6 @@ async function sendMessage() {
     const assistantMsg = data.reply
     
     if (assistantMsg) {
-      // 使用打字机效果显示
       typeMessage(assistantMsg, () => {
         addMessageToCurrent({ role: 'assistant', content: assistantMsg })
         typingMessage.value = ''
@@ -281,7 +263,6 @@ function handleKeydown(e) {
     e.preventDefault()
     sendMessage()
   }
-  // Shift+Enter 默认换行，不需要额外处理
 }
 
 // ===== 可编辑标题 =====
@@ -336,7 +317,7 @@ async function copyMessage(content) {
     tempDiv.innerHTML = renderMarkdown(content)
     const plainText = tempDiv.textContent || tempDiv.innerText || ''
     await navigator.clipboard.writeText(plainText)
-    alert('✅ 已复制到剪贴板')
+    alert('已复制到剪贴板')
   } catch (err) {
     console.error('复制失败:', err)
     alert('复制失败，请手动复制')
@@ -397,7 +378,7 @@ function shareChat() {
     navigator.share({ title: title, text: text }).catch(() => {})
   } else {
     navigator.clipboard.writeText(text).then(() => {
-      alert('✅ 对话已复制到剪贴板，可粘贴分享')
+      alert('对话已复制到剪贴板，可粘贴分享')
     }).catch(() => {
       alert('复制失败，请手动复制')
     })
@@ -414,7 +395,6 @@ function handleNewChat() {
 function handleSwitchSession(sessionId) {
   switchSession(sessionId)
   scrollToBottom()
-  // 不关闭侧边栏
 }
 
 function handleDeleteSession(sessionId) {
@@ -461,67 +441,15 @@ function goToSearchResult(sessionId, messageIndex) {
     }
   })
   clearSearch()
-  // 不关闭侧边栏
 }
 
-// ===== 登录/注册 =====
-const showLoginModal = ref(false)
-const isLogin = ref(true)
-const loginEmail = ref('')
-const loginPassword = ref('')
-
-function openLoginModal() {
-  showLoginModal.value = true
-}
-
-function closeModal() {
-  showLoginModal.value = false
-  loginEmail.value = ''
-  loginPassword.value = ''
-}
-
-function toggleAuthMode() {
-  isLogin.value = !isLogin.value
-}
-
-async function handleAuth() {
-  if (!loginEmail.value || !loginPassword.value) {
-    alert('请填写完整信息')
-    return
-  }
-  
-  // 模拟登录/注册（仅前端演示）
-  if (isLogin.value) {
-    // 模拟登录验证
-    if (loginEmail.value === 'test@test.com' && loginPassword.value === '123456') {
-      localStorage.setItem('user', JSON.stringify({ email: loginEmail.value }))
-      alert('✅ 登录成功')
-      closeModal()
-    } else {
-      alert('❌ 账号或密码错误（演示账号：test@test.com / 123456）')
-    }
-  } else {
-    // 模拟注册
-    localStorage.setItem('user', JSON.stringify({ email: loginEmail.value }))
-    alert('✅ 注册成功，请登录')
-    isLogin.value = true
-  }
-}
-
-// 检查是否已登录
 onMounted(() => {
   loadModels()
   scrollToBottom()
-  const user = localStorage.getItem('user')
-  if (!user) {
-    // 未登录，延迟弹窗
-    setTimeout(openLoginModal, 500)
-  }
 })
 </script>
 
 <style scoped>
-/* ===== 基础重置 ===== */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -569,16 +497,6 @@ onMounted(() => {
   background: white;
   color: #3d2a2a;
 }
-.app-container:not(.dark-theme) .sidebar-header {
-  border-bottom: 2px solid #dcc8c8;
-}
-.app-container:not(.dark-theme) .sidebar-search input {
-  background: white;
-  border: 1px solid #dcc8c8;
-}
-.app-container:not(.dark-theme) .session-item.active {
-  background: rgba(200, 170, 170, 0.25);
-}
 .app-container:not(.dark-theme) .chat-messages {
   background: #faf7f5;
 }
@@ -613,17 +531,6 @@ onMounted(() => {
   background: #2a3845;
   color: #dde4e8;
 }
-.dark-theme .sidebar-header {
-  border-bottom: 2px solid #3a4a55;
-}
-.dark-theme .sidebar-search input {
-  background: #1a242e;
-  border: 1px solid #3a4a55;
-  color: #dde4e8;
-}
-.dark-theme .session-item.active {
-  background: rgba(58, 86, 104, 0.3);
-}
 .dark-theme .chat-messages {
   background: #0d1216;
 }
@@ -650,19 +557,18 @@ onMounted(() => {
   flex-direction: column;
   min-width: 0;
   height: 100vh;
-  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.chat-shifted {
-  margin-left: 0;
 }
 
-/* ===== 侧边栏内部 ===== */
 .sidebar-header {
   padding: 18px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
+  border-bottom: 2px solid #dcc8c8;
+}
+.dark-theme .sidebar-header {
+  border-bottom: 2px solid #3a4a55;
 }
 .sidebar-header h3 {
   font-size: 18px;
@@ -675,17 +581,9 @@ onMounted(() => {
   border-radius: 20px;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-.new-chat-btn:hover {
-  background: rgba(0,0,0,0.15);
 }
 .dark-theme .new-chat-btn {
   background: rgba(255,255,255,0.08);
-}
-.dark-theme .new-chat-btn:hover {
-  background: rgba(255,255,255,0.15);
 }
 
 .sidebar-search {
@@ -698,10 +596,13 @@ onMounted(() => {
   border-radius: 20px;
   font-size: 14px;
   outline: none;
-  transition: 0.2s;
+  border: 1px solid #dcc8c8;
+  background: white;
 }
-.sidebar-search input:focus {
-  border-color: #8a9aa8;
+.dark-theme .sidebar-search input {
+  border: 1px solid #3a4a55;
+  background: #1a242e;
+  color: #dde4e8;
 }
 
 .session-list {
@@ -717,7 +618,6 @@ onMounted(() => {
   border-radius: 10px;
   cursor: pointer;
   margin-bottom: 4px;
-  transition: background 0.15s;
 }
 .session-item:hover {
   background: rgba(0,0,0,0.04);
@@ -766,7 +666,6 @@ onMounted(() => {
   padding: 12px 24px;
   gap: 12px;
   flex-shrink: 0;
-  transition: background 0.3s, color 0.3s;
 }
 .menu-toggle {
   background: rgba(0,0,0,0.06);
@@ -775,17 +674,10 @@ onMounted(() => {
   cursor: pointer;
   padding: 4px 10px;
   border-radius: 8px;
-  transition: background 0.2s;
   color: inherit;
-}
-.menu-toggle:hover {
-  background: rgba(0,0,0,0.12);
 }
 .dark-theme .menu-toggle {
   background: rgba(255,255,255,0.06);
-}
-.dark-theme .menu-toggle:hover {
-  background: rgba(255,255,255,0.12);
 }
 .chat-title {
   flex: 1;
@@ -817,16 +709,9 @@ onMounted(() => {
   border-radius: 20px;
   cursor: pointer;
   font-size: 18px;
-  transition: background 0.2s;
-}
-.theme-toggle:hover {
-  background: rgba(0,0,0,0.12);
 }
 .dark-theme .theme-toggle {
   background: rgba(255,255,255,0.06);
-}
-.dark-theme .theme-toggle:hover {
-  background: rgba(255,255,255,0.12);
 }
 .clear-btn {
   background: rgba(0,0,0,0.06);
@@ -835,24 +720,16 @@ onMounted(() => {
   border-radius: 20px;
   cursor: pointer;
   font-size: 13px;
-  transition: background 0.2s;
   color: inherit;
-}
-.clear-btn:hover {
-  background: rgba(0,0,0,0.12);
 }
 .dark-theme .clear-btn {
   background: rgba(255,255,255,0.06);
-}
-.dark-theme .clear-btn:hover {
-  background: rgba(255,255,255,0.12);
 }
 
 .chat-messages {
   flex: 1;
   overflow-y: auto;
   padding: 20px 24px;
-  transition: background 0.3s;
 }
 .message {
   margin-bottom: 14px;
@@ -871,7 +748,6 @@ onMounted(() => {
   border-radius: 18px;
   word-wrap: break-word;
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-  transition: background 0.3s, color 0.3s;
 }
 .message.user .bubble {
   border-radius: 18px 18px 4px 18px;
@@ -903,16 +779,7 @@ onMounted(() => {
   padding: 2px 8px;
   border-radius: 4px;
 }
-.copy-btn:hover {
-  background: rgba(0,0,0,0.04);
-  color: #555;
-}
-.dark-theme .copy-btn:hover {
-  background: rgba(255,255,255,0.04);
-  color: #aaa;
-}
 
-/* ===== Loading 动画 ===== */
 .typing .dot {
   display: inline-block;
   width: 10px;
@@ -929,13 +796,15 @@ onMounted(() => {
   30% { opacity: 1; transform: scale(1.2); }
 }
 
-/* ===== 输入框 ===== */
 .chat-input {
   display: flex;
   padding: 14px 20px;
   gap: 12px;
   flex-shrink: 0;
-  transition: background 0.3s;
+  border-top: 1px solid #dcc8c8;
+}
+.dark-theme .chat-input {
+  border-top: 1px solid #3a4a55;
 }
 .chat-textarea {
   flex: 1;
@@ -947,8 +816,11 @@ onMounted(() => {
   resize: none;
   min-height: 48px;
   max-height: 150px;
-  transition: border-color 0.3s, background 0.3s, color 0.3s;
   line-height: 1.5;
+  border: 1px solid #dcc8c8;
+}
+.dark-theme .chat-textarea {
+  border: 1px solid #3a4a55;
 }
 .chat-textarea:focus {
   border-color: #8a9aa8;
@@ -961,104 +833,16 @@ onMounted(() => {
   cursor: pointer;
   font-weight: 500;
   font-size: 15px;
-  transition: background 0.2s;
   color: inherit;
-  white-space: nowrap;
-}
-.chat-input button:hover {
-  background: rgba(0,0,0,0.15);
 }
 .dark-theme .chat-input button {
   background: rgba(255,255,255,0.06);
-}
-.dark-theme .chat-input button:hover {
-  background: rgba(255,255,255,0.12);
 }
 .chat-input button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
-/* ===== 登录弹窗 ===== */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-.modal-content {
-  background: white;
-  padding: 40px;
-  border-radius: 20px;
-  min-width: 320px;
-  position: relative;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-.dark-theme .modal-content {
-  background: #1a242e;
-  color: #dde4e8;
-}
-.modal-content h2 {
-  margin-bottom: 20px;
-  text-align: center;
-}
-.modal-content input {
-  width: 100%;
-  padding: 12px 16px;
-  margin-bottom: 12px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  font-size: 14px;
-  background: #f5f5f5;
-  color: #333;
-}
-.dark-theme .modal-content input {
-  background: #24303a;
-  color: #dde4e8;
-  border-color: #3a4a55;
-}
-.modal-content button[type="button"] {
-  width: 100%;
-  padding: 12px;
-  background: #2d3a42;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.modal-content button[type="button"]:hover {
-  background: #3a4a55;
-}
-.toggle-link {
-  text-align: center;
-  margin-top: 12px;
-  cursor: pointer;
-  color: #666;
-  font-size: 14px;
-}
-.toggle-link:hover {
-  text-decoration: underline;
-}
-.close-modal {
-  position: absolute;
-  top: 10px;
-  right: 16px;
-  background: none;
-  border: none;
-  font-size: 22px;
-  cursor: pointer;
-  color: #999;
-}
-
-/* ===== 高亮闪烁 ===== */
 .highlight-flash {
   animation: flashHighlight 2s ease;
 }
@@ -1068,12 +852,11 @@ onMounted(() => {
   100% { background-color: transparent; }
 }
 
-/* ===== 移动端适配 ===== */
 @media (max-width: 768px) {
   .sidebar {
-    width: 70vw;
-    min-width: 70vw;
-    margin-left: -70vw;
+    width: 50vw;
+    min-width: 50vw;
+    margin-left: -50vw;
   }
   .sidebar-open {
     margin-left: 0;
@@ -1113,10 +896,6 @@ onMounted(() => {
   .chat-input button {
     padding: 10px 18px;
     font-size: 14px;
-  }
-  .modal-content {
-    min-width: 280px;
-    padding: 30px;
   }
 }
 </style>
