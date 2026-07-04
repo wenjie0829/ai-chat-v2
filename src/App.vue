@@ -764,8 +764,8 @@ onMounted(() => {
 
 /* ===== 黑夜模式气泡 ===== */
 .dark-theme .message.user .bubble {
-  background: #3a5668;
-  color: #eef4f8;
+  background: #4f8596; 
+  color: #ffffff;
 }
 
 .dark-theme .message.assistant .bubble {
