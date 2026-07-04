@@ -321,7 +321,6 @@ function handleNewChat() {
 function handleSwitchSession(sessionId) {
   switchSession(sessionId)
   scrollToBottom()
-  sidebarOpen.value = false
 }
 
 function handleDeleteSession(sessionId) {
