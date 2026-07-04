@@ -835,9 +835,9 @@ onMounted(() => {
 /* ===== 移动端适配 ===== */
 @media (max-width: 768px) {
   .sidebar {
-    width: 70vw;
-    min-width: 70vw;
-    margin-left: -70vw;
+    width: 60vw;
+    min-width: 60vw;
+    margin-left: -60vw;
   }
   .sidebar-open {
     margin-left: 0;
