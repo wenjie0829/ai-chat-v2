@@ -30,6 +30,8 @@ const MODELS = {
     model: 'glm-5.2',
   },
 };
+console.log('DEEPSEEK_API_KEY:', process.env.DEEPSEEK_API_KEY ? '已设置 ✓' : '未设置 ✗');
+console.log('ZHIPU_API_KEY:', process.env.ZHIPU_API_KEY ? '已设置 ✓' : '未设置 ✗');
 
 // ========== API 路由：处理聊天请求 ==========
 app.post('/api/chat', async (req, res) => {
