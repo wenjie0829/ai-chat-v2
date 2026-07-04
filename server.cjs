@@ -99,5 +99,5 @@ app.get('*', (req, res) => {
 // ========== 启动服务器 ==========
 app.listen(port, () => {
   console.log(`AI 代理服务已启动: http://localhost:${port}`);
-  console.log(`可用模型: ${Object.keys(MODELS).join(', ')}`);
+  console.log(`可用模型: ${Object.keys(getModels()).join(', ')}`);
 });
