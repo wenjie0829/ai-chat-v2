@@ -1,42 +1,31 @@
-# ai-chat-app
-
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Recommended Browser Setup
-
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
+# 💡 智言 · AI智能对话平台
+一个可以直接在浏览器里使用的AI聊天应用，支持切换不同AI模型、管理多轮对话、导出聊天记录。
+## ✨ 你能用它做什么
+和AI聊天（支持DeepSeek和智谱GLM两种模型，可以自由切换）
+管理多个对话（新建、切换、删除、双击标题重命名）
+导出对话为Markdown文件
+切换白天/黑夜模式
+## 🛠️ 技术栈
+前端：Vue 3 + Vite
+后端：Node.js + Express
+AI接口：DeepSeek API、智谱GLM API
+部署：Railway
+## 🚀 在线体验
+🔗 [点击这里打开智言](https://ai-chat-v2-production-ce8e.up.railway.app/)
+## 📂 项目结构
+智言/
+├── api/ # 后端接口（调用AI模型）
+├── public/ # 前端页面文件
+├── src/ # 前端源代码（Vue组件、样式等）
+├── server.cjs # 后端服务入口
+└── package.json # 项目配置文件
+## 🖥️ 本地运行
+如果你想在本地跑起来：
+# 1. 安装依赖
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
+# 2. 启动开发服务器
 npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
+👤 关于我
+计算机科学与技术专业大三学生，正在寻找AI应用开发方向的实习机会。
+GitHub：[https://github.com/wenjie0829]
+邮箱：[3535605546@qq.com]
